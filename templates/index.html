@@ -4,15 +4,127 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+1p&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/index.css">
     <title>Document</title>
 </head>
 <body>
-    バリュー{{value_list}}<br><br>
-    オール{{all_day}}<br><br>
-    平均{{mean_value}}<br><br>
-    最大{{max_value}}<br><br>
-    最小{{min_value}}<br><br>
-    ピーク{{peak_time}}<br><br>
-    データ{{data_list}}<br><br>
+    <div class="ui main container">
+        <div class="ui raised segment" style="text-align: center; margin-top: 30px;">
+            <form action="/" method="post">
+                <select class="ui selection dropdown" name="choose_day">
+                    {%for i in data_list%}
+                        <option value="{{i}}">{{i}}</option>
+                    {%endfor%}
+                </select>
+                <button class="ui primary button" type="submit">
+                    <font style="vertical-align: inherit;">
+                        <font style="vertical-align: inherit;">
+                            表示
+                        </font>
+                    </font>
+                </button>
+            </form>
+            　
+            <button class="ui olive button" style="width:200px;">
+                <font style="vertical-align: inherit;">
+                    <font style="vertical-align: inherit;">
+                        世帯
+                    </font>
+                </font>
+            </button>
+            <button class="ui teal button" style="width:200px;">
+                <font style="vertical-align: inherit;">
+                    <font style="vertical-align: inherit;">
+                        コミュニティ
+                    </font>
+                </font>
+            </button>
+        </div>
+        <div class="ui two column grid">
+            <div class="column">
+                <div class="ui raised segment">
+                    <div id="chart_div" style="width: 100%; height: 400px;"></div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="ui raised segment">
+                    <h3 id="zouka_text"></h3>
+                    <div style="text-align: center;">
+                        <img id="mypic" src="./static/images/tree1.png" alt="tree1.png" style="height: 359px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="analyze_txt" class="ui horizontal segments" style="text-align: center; margin-top: 30px;">
+            <div class="ui segment" style="font-size: 25px;">
+                MAX：{{max_value}}
+            </div>
+            <div class="ui segment" style="font-size: 25px;">
+                MIN：{{min_value}}
+            </div>
+            <div class="ui segment" style="font-size: 25px;">
+                MEAN：{{mean_value}}
+            </div>
+            <div class="ui segment" style="font-size: 25px;">
+                TOTAL：{{all_day}}
+            </div>
+        </div>
+        <div id="analyze_txt_2" class="ui horizontal segments" style="text-align: center; margin-top: 30px;">
+            <div class="ui segment" style="font-size: 25px;">
+                PEAK TIME：
+                {%for i in peak_time%}
+                    {{i}}　
+                {%endfor%}
+            </div>
+        </div>
+    </div>
+    <!-- <div id="analyze_txt" class="ui raised segment">
+        <h2 style="color: #B3783F;">{{choose_day}}</h2>
+    </div> -->
+    <!-- グラフ描画関数 -->
+    <script type="text/javascript">
+        current_list = {{ graph_list|tojson }}
+        google.load('visualization', '1', {'packages':['corechart']}); 
+        google.setOnLoadCallback(drawChart);  
+        function drawChart() {     
+            var data = google.visualization.arrayToDataTable(current_list);
+            var options = {
+            title: '消費電力'
+            };     
+            var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
+        }
+    </script>
+
+    <script>
+        const img = {{grow_list|tojson}};
+        console.log(img)
+        
+        let count = -1;
+        let state = 0;
+        vals =  {{time_txt_|tojson}};
+      
+        function slideshow_timer() {
+          count++;
+          // カウントが最大になれば初期値に戻す
+          if (count == vals.length) {
+            count = 0;
+            state = 0;
+          }
+          document.getElementById("mypic").src = img[state];
+          document.getElementById("zouka_text").innerText = vals[count];
+          setTimeout("slideshow_timer()",2000);
+          state ++;
+        }
+        window.onload = () => {
+          slideshow_timer();
+        }
+    </script>
 </body>
 </html>

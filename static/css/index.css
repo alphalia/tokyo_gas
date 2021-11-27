@@ -1,0 +1,21 @@
+body{
+    background-color: #E7E3E3;
+}
+
+select{
+    font-size:90%;
+}
+
+form{
+    display:inline;
+}
+
+#zouka_text{
+    font-family: 'M PLUS 1p', sans-serif;
+    font-weight: bold;
+}
+
+#analyze_txt{
+    font-family: 'M PLUS 1p', sans-serif;
+    font-size: 30px;
+}
