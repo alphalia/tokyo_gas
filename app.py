@@ -98,7 +98,6 @@ def index():
     graph_list = graph_dict[choose_day]
     grow_dict  = day_grow_dict[choose_day]
     grow_list = grow_list_dict[choose_day]
-    print(peak_time)
 
     return render_template("index.html",data_list=data_list,\
                             peak_time=peak_time,value_list=value_list,\
