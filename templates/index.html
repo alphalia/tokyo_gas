@@ -31,20 +31,22 @@
                 </button>
             </form>
             　
-            <button class="ui olive button" style="width:200px;">
-                <font style="vertical-align: inherit;">
+            <form action="/" method="post">
+                <button class="ui olive button" style="width:200px;" name="which" value="0">
                     <font style="vertical-align: inherit;">
-                        世帯
+                        <font style="vertical-align: inherit;">
+                            世帯
+                        </font>
                     </font>
-                </font>
-            </button>
-            <button class="ui teal button" style="width:200px;">
-                <font style="vertical-align: inherit;">
+                </button>
+                <button class="ui teal button" style="width:200px;" name="which" value="1">
                     <font style="vertical-align: inherit;">
-                        コミュニティ
+                        <font style="vertical-align: inherit;">
+                            コミュニティ
+                        </font>
                     </font>
-                </font>
-            </button>
+                </button>
+            </form>
         </div>
         <div class="ui two column grid">
             <div class="column">
@@ -58,6 +60,30 @@
                     <div style="text-align: center;">
                         <img id="mypic" src="./static/images/tree1.png" alt="tree1.png" style="height: 359px;">
                     </div>
+                </div>
+            </div>
+        </div>
+        <div id="analyze_txt_3" class="ui horizontal segments" style="text-align: center; margin-top: 30px;">
+            <div class="ui segment" style="font-size: 25px;">
+                <form action="/" method="post">
+                    <button class="ui teal button" style="width:200px;" name="amakara" value="0">
+                        <font style="vertical-align: inherit;">
+                            <font style="vertical-align: inherit;">
+                                甘メンター
+                            </font>
+                        </font>
+                    </button>
+                    <button class="ui red button" style="width:200px;" name="amakara" value="1">
+                        <font style="vertical-align: inherit;">
+                            <font style="vertical-align: inherit;">
+                                辛メンター
+                            </font>
+                        </font>
+                    </button>
+                </form>
+                <h3 id="zouka_text_2"></h3>
+                <div style="text-align: center;">
+                    <img id="mypic_2" src="./static/images/ama_shin_good.png" alt="ama_shin_good.png" style="width: 1000px;">
                 </div>
             </div>
         </div>
@@ -83,6 +109,41 @@
                 {%endfor%}
             </div>
         </div>
+        <div id="analyze_txt_5" class="ui horizontal segments" style="margin-top: 30px;">
+            <div class="ui raised segment">
+                <div class="ui two column grid">
+                    <div class="column">
+                        <br><br><br>
+                        <div style="font-size: 70px;">現在</div><br><br><br><br><br><br>
+                        <div style="font-size: 200px; text-align: center; color:#089222;" >{{tree_count_is}}</div>
+                        <br><br><br><br><br><br><div style="font-size: 70px; text-align: right;">本</div>
+                    </div>
+                    <div class="column" style="text-align: center;">
+                        <img src="./static/images/trees.png" alt="trees.png" >
+                    </div>
+                </div>
+                <br>
+                <div style="text-align: center; font-size:50px;">残り{{nokori}}本でVGポイントプレゼント！</div>
+                <br>
+            </div>
+        </div>
+        <div id="analyze_txt_4" class="ui horizontal segments" style="margin-top: 30px;">
+            <div class="ui segment">
+                <h3>（1）節電ポイント特典</h3>
+                1節電ポイント＝1VGポイントとし、節電量に応じたVGポイントを付与します。<br>
+                <b>節電ポイントとは</b><br>
+                前日までに設定された特定の時間帯において、ご家庭ごとに算定する標準的な使用量*4よりも実際の使用量が下回る場合に取得できるポイント。<br>
+                節電量1kWhあたり5節電ポイントまたは10節電ポイントを付与<br>
+                （※付与ポイントについては、前日にメールでお知らせします）。<br>
+                <h3>（2）ランキング特典</h3>
+                キャンペーン期間終了時点のポイント獲得ランキングに応じ、VGポイントを追加で付与します。<br>
+                <b>1位から10位まで</b>：5,000VGポイント<br>
+                <b>11位から100位まで</b>：3,000VGポイント<br>
+                <b>101位から1,000位まで</b>：1,000VGポイント<br>
+                <b>1,001位から3,000位まで</b>：500VGポイント
+            </div>
+        </div>
+        <br>
     </div>
     <!-- グラフ描画関数 -->
     <script type="text/javascript">
@@ -99,12 +160,16 @@
         }
     </script>
 
+    <!-- 画像移り変わり -->
     <script>
         const img = {{grow_list|tojson}};
-        console.log(img)
+        const img_2 = {{comment_list|tojson}};
+        //console.log(img)
         
         let count = -1;
         let state = 0;
+        let count_2 = -1;
+        let state_2 = 0;
         vals =  {{time_txt_|tojson}};
       
         function slideshow_timer() {
@@ -116,12 +181,33 @@
           }
           document.getElementById("mypic").src = img[state];
           document.getElementById("zouka_text").innerText = vals[count];
-          setTimeout("slideshow_timer()",2000);
+          setTimeout("slideshow_timer()",2800);
           state ++;
         }
-        window.onload = () => {
-          slideshow_timer();
-        }
+
+        function slideshow_timer_2() {
+            count_2++;
+            // カウントが最大になれば初期値に戻す
+            if (count_2 == vals.length) {
+              count_2 = 0;
+              state_2 = 0;
+            }
+            document.getElementById("mypic_2").src = img_2[state_2];
+            document.getElementById("zouka_text_2").innerText = vals[count_2];
+            setTimeout("slideshow_timer_2()",2800);
+            state_2 ++;
+          }
+        window.addEventListener('load', function(){
+            slideshow_timer();
+            console.log('FIRST onload');
+          });
+        window.addEventListener('load', function(){
+            slideshow_timer_2();
+            console.log('second onload');
+        });
     </script>
+
+    <!-- ************************************ -->
+
 </body>
 </html>
